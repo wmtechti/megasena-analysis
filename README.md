@@ -41,26 +41,44 @@ Row: +------+------+------+------+------+------+
 megasena/
 ├── src/
 │   ├── __init__.py
-│   ├── __main__.py          # Entry point para CLI
-│   ├── spatial.py           # Mapeamento espacial do volante
-│   ├── ingest.py            # Ingestão e validação de dados
-│   ├── features.py          # Extração de features espaciais
-│   └── pipeline.py          # CLI (Typer)
+│   ├── __main__.py              # Entry point para CLI
+│   ├── spatial.py               # Mapeamento espacial do volante
+│   ├── ingest.py                # Ingestão e validação de dados
+│   ├── features.py              # Features espaciais básicas
+│   ├── features_advanced.py     # Features espaciais avançadas
+│   ├── monte_carlo.py           # Simulação Monte Carlo
+│   ├── validation.py            # Validação estatística
+│   ├── visualization.py         # Geração de gráficos
+│   └── pipeline.py              # CLI (Typer)
 ├── data/
 │   ├── raw/
-│   │   └── Mega-Sena.xlsx   # Arquivo histórico (não versionado)
+│   │   └── Mega-Sena.xlsx       # Arquivo histórico (não versionado)
 │   └── processed/
-│       ├── draws_features.parquet  # Features espaciais
-│       └── draws_vectors.npz       # Vetores binários
-├── notebooks/               # Análises exploratórias
-├── reports/                 # Relatórios e visualizações
+│       ├── draws_features.parquet      # Features espaciais
+│       ├── draws_vectors.npz           # Vetores binários
+│       ├── monte_carlo_simulation.parquet
+│       ├── baseline_statistics.parquet
+│       ├── validation_results.parquet
+│       └── validation_summary.json
+├── reports/                     # Visualizações geradas
+│   ├── heatmap_density.png
+│   ├── dispersion_comparison.png
+│   ├── centroid_scatter.png
+│   ├── feature_comparison.png
+│   └── effect_size_distribution.png
+├── docs/                        # Documentação detalhada
+│   ├── validation_plan.md       # Metodologia estatística
+│   └── git_guide.md             # Guia de versionamento
 ├── tests/
 │   ├── __init__.py
 │   ├── conftest.py
-│   ├── test_spatial.py      # Testes do mapeamento espacial
-│   └── test_features.py     # Testes das features
+│   ├── test_spatial.py          # Testes do mapeamento espacial
+│   └── test_features.py         # Testes das features
+├── analise_resultados.ipynb     # Notebook interativo de análise
+├── estimate_time.py             # Script de estimativa de tempo
 ├── requirements.txt
-├── setup.py
+├── CHANGELOG.md                 # Histórico de versões
+├── VERSION                      # Versão atual
 ├── .gitignore
 └── README.md
 ```
@@ -241,6 +259,41 @@ python -m src.pipeline simulate
 python -m src.pipeline validate
 python -m src.pipeline visualize
 ```
+
+## 📊 Análise Interativa (Notebook)
+
+Para explorar os resultados de forma visual e interativa, utilize o notebook Jupyter fornecido:
+
+```bash
+# Abrir no Jupyter
+jupyter notebook analise_resultados.ipynb
+
+# Ou no VS Code
+# Clique em analise_resultados.ipynb e execute "Run All"
+```
+
+### O que o Notebook Oferece
+
+- ✅ **Carregamento automático** de todos os dados processados
+- 📈 **Visualizações inline** de todos os gráficos gerados
+- 📊 **Estatísticas detalhadas** da validação estatística
+- 🔍 **Análise interativa** - explore features específicas alterando uma variável
+- 📋 **Tabelas comparativas** observado vs baseline
+- 💡 **Conclusões interpretadas** com contexto científico
+
+### Pré-requisitos do Notebook
+
+```bash
+pip install jupyter ipykernel ipython
+```
+
+O notebook já está configurado para:
+1. Carregar dados de `data/processed/`
+2. Exibir visualizações de `reports/`
+3. Apresentar resumo da validação estatística
+4. Permitir análise customizada de qualquer feature
+
+**Ideal para**: Apresentações, relatórios, exploração de dados e validação de hipóteses.
 
 ## 🧪 Testes
 
