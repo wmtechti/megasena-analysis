@@ -139,19 +139,22 @@ def compute_baseline_statistics(
         if col not in ["simulation_id", "draw_id"]
     ]
     
-    # Agrupa por simulação e calcula média
+    # Agrupa por simulação e calcula média (ignora NaN)
     sim_means = simulation_df.groupby("simulation_id")[feature_cols].mean()
     
-    # Estatísticas do baseline
+    # Estatísticas do baseline (skipna=True para ignorar NaN)
     stats = pd.DataFrame({
-        "mean": sim_means.mean(),
-        "std": sim_means.std(),
+        "mean": sim_means.mean(skipna=True),
+        "std": sim_means.std(skipna=True),
         "percentile_2.5": sim_means.quantile(0.025),
         "percentile_50": sim_means.quantile(0.50),
         "percentile_97.5": sim_means.quantile(0.975),
-        "min": sim_means.min(),
-        "max": sim_means.max()
+        "min": sim_means.min(skipna=True),
+        "max": sim_means.max(skipna=True)
     })
+    
+    # Substitui inf por NaN para evitar problemas
+    stats = stats.replace([np.inf, -np.inf], np.nan)
     
     return stats
 

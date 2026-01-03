@@ -372,6 +372,7 @@ def plot_effect_size_distribution(
 
 
 def generate_all_visualizations(
+    raw_df: pd.DataFrame,
     observed_df: pd.DataFrame,
     simulated_df: pd.DataFrame,
     validation_df: pd.DataFrame,
@@ -382,6 +383,7 @@ def generate_all_visualizations(
     Gera todas as visualizações de uma vez.
     
     Args:
+        raw_df: DataFrame com dados brutos (bola_1...bola_6)
         observed_df: Features observadas
         simulated_df: Features simuladas
         validation_df: Resultados da validação
@@ -395,7 +397,7 @@ def generate_all_visualizations(
     
     # 1. Heatmap de densidade
     plot_heatmap_density(
-        observed_df,
+        raw_df,
         output_path=str(output_path / "heatmap_density.png")
     )
     

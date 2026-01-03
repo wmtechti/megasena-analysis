@@ -220,11 +220,12 @@ def compute_eccentricity(positions: List[Tuple[int, int]]) -> float:
     std_row = np.std(rows)
     std_col = np.std(cols)
     
-    # Proteção para divisão por zero
-    if std_col == 0:
-        return float('inf') if std_row > 0 else 1.0
+    # Proteção para divisão por zero e NaN
+    if std_col == 0 or std_row == 0:
+        return 1.0  # Retorna 1.0 em vez de inf para evitar problemas
     
-    return std_row / std_col
+    result = std_row / std_col
+    return result if np.isfinite(result) else 1.0
 
 
 def compute_symmetry(positions: List[Tuple[int, int]]) -> Dict[str, int]:

@@ -298,6 +298,11 @@ def validate(
 
 @app.command()
 def visualize(
+    input_path: str = typer.Option(
+        "data/raw/Mega-Sena.xlsx",
+        "--input", "-i",
+        help="Caminho para arquivo Excel (para heatmap)"
+    ),
     features_path: str = typer.Option(
         "data/processed/draws_features.parquet",
         "--features", "-f",
@@ -334,6 +339,7 @@ def visualize(
     try:
         # Carrega dados
         typer.echo("\nCarregando dados...")
+        raw_df = ingest_raw_data(input_path)
         observed_df = pd.read_parquet(features_path)
         simulation_df = pd.read_parquet(simulation_path)
         validation_df = pd.read_parquet(validation_path)
@@ -341,6 +347,7 @@ def visualize(
         
         # Gera visualizações
         generate_all_visualizations(
+            raw_df,
             observed_df,
             simulation_df,
             validation_df,
