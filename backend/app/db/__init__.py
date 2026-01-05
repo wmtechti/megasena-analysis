@@ -44,7 +44,7 @@ def get_engine_kwargs() -> dict:
     - MS SQL Server: Configurações específicas para ODBC
     """
     base_kwargs = {
-        "echo": settings.ENVIRONMENT == "dev",  # Log SQL em dev
+        "echo": settings.ENVIRONMENT == "development",  # Log SQL em dev
         "future": True,  # SQLAlchemy 2.0 style
     }
     
@@ -61,13 +61,22 @@ def get_engine_kwargs() -> dict:
         })
     elif settings.DATABASE_TYPE in ["postgresql", "supabase"]:
         # PostgreSQL/Supabase
-        base_kwargs.update({
-            "pool_pre_ping": True,
-            "pool_size": 20,
-            "max_overflow": 40,
-            "pool_recycle": 3600,  # Recicla conexões a cada 1h
-            "poolclass": QueuePool if settings.is_production else NullPool,
-        })
+        is_production = settings.ENVIRONMENT == "production"
+        
+        if is_production:
+            # Produção: usa pool de conexões
+            base_kwargs.update({
+                "pool_pre_ping": True,
+                "pool_size": 20,
+                "max_overflow": 40,
+                "pool_recycle": 3600,  # Recicla conexões a cada 1h
+                "poolclass": QueuePool,
+            })
+        else:
+            # Desenvolvimento: sem pool (NullPool não aceita pool_size/max_overflow)
+            base_kwargs.update({
+                "poolclass": NullPool,
+            })
         
         # Supabase: Adiciona parâmetros específicos
         if settings.DATABASE_TYPE == "supabase":

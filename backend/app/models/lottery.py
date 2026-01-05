@@ -4,7 +4,7 @@ Modelos de loterias e sorteios.
 Tabelas agnósticas de banco de dados.
 """
 
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float, JSON, Index, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float, JSON, Boolean, Index, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base, TimestampMixin
@@ -26,6 +26,8 @@ class Lottery(Base, TimestampMixin):
         grid_cols: Colunas do volante
         is_active: Loteria ativa no sistema?
     """
+    
+    __tablename__ = "lotteries"
     
     id = Column(Integer, primary_key=True, index=True)
     slug = Column(String(50), unique=True, nullable=False, index=True, comment="Identificador (megasena, lotofacil...)")

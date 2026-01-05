@@ -93,7 +93,10 @@ def get_settings() -> Settings:
     
     @lru_cache garante que Settings() seja chamado apenas uma vez.
     """
-    return Settings()
+    settings = Settings()
+    print(f"[DEBUG] Loaded DATABASE_URL: {settings.DATABASE_URL}")
+    print(f"[DEBUG] Database type: {settings.DATABASE_TYPE}")
+    return settings
 
 
 # Instância global
