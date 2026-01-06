@@ -9,11 +9,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.config import settings
-from app.db import engine
+from app.db import engine, get_db
 from app.models import Base
+from app.services.lottery_service import LotteryService
 
-# Importar routers (quando criados)
-# from app.api.v1 import lotteries, users, auth
+# Importar routers
+from app.api.v1 import api_router
 
 
 @asynccontextmanager
@@ -36,6 +37,14 @@ async def lifespan(app: FastAPI):
     if settings.environment == "development":
         print("📦 Creating database tables...")
         Base.metadata.create_all(bind=engine)
+        
+        # Garantir que loterias base existem
+        print("🎲 Ensuring base lotteries exist...")
+        db = next(get_db())
+        try:
+            LotteryService.ensure_lotteries_exist(db)
+        finally:
+            db.close()
     
     yield
     
@@ -92,10 +101,10 @@ async def root():
         "version": "1.0.0",
         "docs": "/docs",
         "health": "/health",
+        "api": "/api/v1/lotteries",
     }
 
 
-# Registrar routers (quando criados)
-# app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
-# app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
-# app.include_router(lotteries.router, prefix="/api/v1/lotteries", tags=["lotteries"])
+# Registrar routers
+app.include_router(api_router, prefix="/api/v1")
+

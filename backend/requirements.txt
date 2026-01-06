@@ -35,6 +35,7 @@ httpx==0.26.0
 numpy==1.26.3
 scipy==1.11.4
 pandas==2.1.4
+openpyxl==3.1.2  # Para ler arquivos Excel
 
 # Processamento de imagens (futuro - para mobile)
 pillow==10.2.0

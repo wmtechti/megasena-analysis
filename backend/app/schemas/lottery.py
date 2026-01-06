@@ -75,13 +75,6 @@ class DrawResponse(DrawBase):
     updated_at: datetime
 
 
-class DrawWithFeatures(DrawResponse):
-    """Schema de resposta com features calculadas."""
-    features: Optional['DrawFeatureResponse'] = None
-
-
-# ========== Features ==========
-
 class DrawFeatureResponse(BaseModel):
     """Schema de resposta com features espaciais."""
     model_config = ConfigDict(from_attributes=True)
@@ -122,6 +115,11 @@ class DrawFeatureResponse(BaseModel):
     
     created_at: datetime
     updated_at: datetime
+
+
+class DrawWithFeaturesResponse(DrawResponse):
+    """Schema de resposta de sorteio com features espaciais."""
+    features: Optional[DrawFeatureResponse] = None
 
 
 # ========== Análise e Estatísticas ==========

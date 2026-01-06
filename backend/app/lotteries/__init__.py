@@ -15,6 +15,9 @@ LOTTERIES: dict[str, LotteryBase] = {
     "lotofacil": lotofacil,
 }
 
+# Alias para compatibilidade
+lottery_registry = LOTTERIES
+
 
 def get_lottery(slug: str) -> LotteryBase:
     """
